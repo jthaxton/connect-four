@@ -1,26 +1,34 @@
 require 'pp'
 class Board 
-    attr_accessor :grid, :game
-    # initialize empty 6 row 7 col grid
-    def initialize
-        @grid = Array.new(6) {Array.new(7) {nil} } 
+    attr_accessor :grid, :game, :infinity
+    # initialize empty @height row @width col grid
+    def initialize(height, width, infinity=false)
+        @grid = Array.new(height) {Array.new(width) {nil} } 
         @game = true 
+        @height = height
+        @width = width
+        @infinity = infinity
     end 
 
-    # place piece into grid if column not full
+    # place piece into grid if move valid
     def place(col, player)
-        # raise "Error: Column is full" if invalid_move?(col)
         col = col.to_i
         i = 0 
-        while i < 6 
-            if !invalid_move?(col) && @grid[i][col].nil? && i == 5
+        while i < @height 
+            if !invalid_move?(col) && @grid[i][col].nil? && i == @height - 1
                 @grid[i][col] = player 
+                # if infinity == true 
+                #     @grid.unshift(Array.new(@width) {nil})
+                # end
                 if win?(i, col, player)
                     puts "#{player} wins! Game over!"
                     @game = false 
                 end
             elsif !invalid_move?(col) && @grid[i][col].nil? && @grid[i + 1][col]
-                @grid[i][col] = player 
+                @grid[i][col] = player
+                # if infinity == true
+                #     @grid.unshift(Array.new(@width) {nil})
+                # end 
                 if win?(i, col, player)
                     puts "#{player} wins! Game over!"
                     @game = false 
@@ -36,7 +44,7 @@ class Board
         col = col.to_i
         i = 0 
         # return true unless range.include?(col)
-        while i < 6  && col < 7
+        while i < @height  && col < @width
             if @grid[i][col] == nil
                 return false 
             end 
@@ -49,8 +57,8 @@ class Board
         # diagonal right, up, down
         i = 0 
         while i <= 3 
-            unless (col + i < 7) && 
-                (row + i < 6) && 
+            unless (col + i < @width) && 
+                (row + i < @height) && 
                 (col - i >= 0) && 
                 (row - i >= 0) &&
                 @grid[row + i][col + i] == player || 
@@ -63,8 +71,8 @@ class Board
         # diagonal left, up, down
         i = 0
         while i <= 3 
-            unless (col + i < 7) && 
-                (row + i < 6) && 
+            unless (col + i < @width) && 
+                (row + i < @height) && 
                 (col - i >= 0) && 
                 (row - i >= 0) &&
                 @grid[row - i][col + i] == player ||
@@ -86,7 +94,7 @@ class Board
     def vertical_win?(row, col, player)
         i = 0 
         while i <= 3
-            unless (row + i < 6) &&
+            unless (row + i < @height) &&
                 (@grid[row + i][col] == player ||
                 @grid[row - i][col] == player )
                 return false 
@@ -103,9 +111,6 @@ class Board
             @game = false 
             return true 
         end 
-            p diagonal_win?(row,col,player)
-            p horizontal_win?(row,col,player)
-            p vertical_win?(row, col, player)
         false 
     end 
 

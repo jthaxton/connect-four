@@ -1,13 +1,13 @@
 require_relative "board"
 require_relative "player"
 class Game 
-    attr_accessor :player1, :player2, :board
+    attr_accessor :board, :players, :infinity
 
-    def initialize(name1, name2)
-        @player1 = Player.new(name1.to_sym)
-        @player2 = Player.new(name2.to_sym)
-        @board = Board.new
+    def initialize(height, width, infinity=false, *players)
+        @board = Board.new(height, width, infinity)
+        @players = *players
     end 
+
 
     def game_over?
         # change to while loop or index

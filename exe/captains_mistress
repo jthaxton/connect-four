@@ -5,11 +5,20 @@ require 'captains_mistress/app'
 
 args = ARGV.clone
 
-options = {}
+options = {:width => 7, :height => 6, :players => 2}
+
+def validate(field)
+  field = field.dup.to_i
+  begin
+    Integer(field)
+  rescue => exception
+    raise "Invalid input! This argument takes positive integers only!"
+  end
+  raise "Invalid input! This argument takes positive integers only!" unless field > 0 
+end 
 
 OptionParser.new do |opts|
   opts.banner = 'Usage: captains_mistress [options]'
-
   opts.on('-v', '--[no-]verbose', 'Run verbosely') do |v|
     options[:verbose] = v
   end
@@ -23,6 +32,28 @@ OptionParser.new do |opts|
     puts CaptainsMistress::VERSION
     exit
   end
+
+  opts.on('--width [WIDTH]', 'Change width') do |width|
+    validate(width)
+    options[:width] = width
+  end 
+
+  opts.on('--height [HEIGHT]', 'Change height') do |height|
+    validate(height)
+    options[:height] = height
+  end 
+
+  opts.on('--num-players [INTEGER]', 'Select number of players') do |players|
+    validate(players)
+    options[:players] = players
+  end 
+
+  opts.on('--infinity', 'Set height to infinity') do
+    options[:infinity] = true
+  end 
+
 end.parse!(args)
+
+
 
 CaptainsMistress::App.new(options).run
