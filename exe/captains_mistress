@@ -48,10 +48,6 @@ OptionParser.new do |opts|
     options[:players] = players
   end 
 
-  opts.on('--infinity', 'Set height to infinity') do
-    options[:infinity] = true
-  end 
-
 end.parse!(args)
 
 

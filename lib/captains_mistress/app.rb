@@ -13,14 +13,12 @@ module CaptainsMistress
       @verbose = options.fetch(:verbose, false)
       @width = options[:width].to_i
       @height = options[:height].to_i
-      @players = options[:players].to_i
-      @infinity = true if options[:infinity] == true
-      
+      @players = options[:players].to_i      
     end
 
     def run
       # You should implement this method.
-      nums = ['0', '1', '2', '3', '4', '5', '6']
+      nums = (0..@width).map{|el| el.to_s}
       puts "Welcome to Captain's Mistress!"
       player_names = []
       until player_names.length == @players 
@@ -28,12 +26,12 @@ module CaptainsMistress
         name = STDIN.gets.chomp
         player_names << name 
       end 
-      game = Game.new(@height, @width, @infinity, player_names)
+      game = Game.new(@height, @width,player_names)
       players = game.players.flatten
       until game.game_over? || game.board.game == false
         current_player = players[0]
         puts " "
-        puts "#{current_player} choose a column from 0 - #{@width}:"
+        puts "#{current_player} choose a column from 0 - #{@width - 1}:"
         current_col = STDIN.gets.chomp
         if game.board.invalid_move?(current_col) || !nums.include?(current_col)
           puts 'Invalid move. Try again.'

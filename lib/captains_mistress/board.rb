@@ -1,13 +1,12 @@
 require 'pp'
 class Board 
-    attr_accessor :grid, :game, :infinity
+    attr_accessor :grid, :game
     # initialize empty @height row @width col grid
-    def initialize(height, width, infinity=false)
+    def initialize(height, width)
         @grid = Array.new(height) {Array.new(width) {nil} } 
         @game = true 
         @height = height
         @width = width
-        @infinity = infinity
     end 
 
     # place piece into grid if move valid
@@ -17,18 +16,12 @@ class Board
         while i < @height 
             if !invalid_move?(col) && @grid[i][col].nil? && i == @height - 1
                 @grid[i][col] = player 
-                # if infinity == true 
-                #     @grid.unshift(Array.new(@width) {nil})
-                # end
                 if win?(i, col, player)
                     puts "#{player} wins! Game over!"
                     @game = false 
                 end
             elsif !invalid_move?(col) && @grid[i][col].nil? && @grid[i + 1][col]
                 @grid[i][col] = player
-                # if infinity == true
-                #     @grid.unshift(Array.new(@width) {nil})
-                # end 
                 if win?(i, col, player)
                     puts "#{player} wins! Game over!"
                     @game = false 
@@ -43,8 +36,7 @@ class Board
     def invalid_move?(col)
         col = col.to_i
         i = 0 
-        # return true unless range.include?(col)
-        while i < @height  && col < @width
+        while i < @height && col < @width
             if @grid[i][col] == nil
                 return false 
             end 

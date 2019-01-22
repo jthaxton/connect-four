@@ -1,10 +1,10 @@
 require_relative "board"
 require_relative "player"
 class Game 
-    attr_accessor :board, :players, :infinity
+    attr_accessor :board, :players
 
-    def initialize(height, width, infinity=false, *players)
-        @board = Board.new(height, width, infinity)
+    def initialize(height, width, *players)
+        @board = Board.new(height, width)
         @players = *players
     end 
 
